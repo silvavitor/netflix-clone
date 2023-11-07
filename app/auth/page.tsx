@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import logo from "@/public/images/logo.png"
 import Input from "@/components/input";
-
+import axios from "axios";
 
 export default function Auth() {
   const [email, setEmail] = useState<string>("");
@@ -16,7 +16,19 @@ export default function Auth() {
 
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) => !currentVariant)
-  }, [])
+  }, []);
+
+  const register = useCallback(async () => {
+    try {
+      await axios.post("/api/register", {
+        email,
+        name,
+        password
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }, [email, name, password]);
 
   function handleChangeEmail(event: React.ChangeEvent<HTMLInputElement>) {
     setEmail(event.target.value);
@@ -67,7 +79,7 @@ export default function Auth() {
                 onChange={handleChangePassword}
               />
             </div>
-            <button className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
+            <button onClick={register} className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
               {variant ? "Login" : "Sign up"}
             </button>
             <p className="text-neutral-500 mt-12">
