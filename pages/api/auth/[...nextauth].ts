@@ -1,12 +1,12 @@
 import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 
 import prismadb from "@/lib/prismadb";
 
 export default NextAuth({
   providers: [
-    Credentials({
+    CredentialsProvider({
       id: "credentials",
       name: "Credentials",
       credentials: {
@@ -20,6 +20,7 @@ export default NextAuth({
         }
       },
       async authorize(credentials) {
+        console.log(credentials);
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password are required!");
         }
